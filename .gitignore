@@ -1,0 +1,8 @@
+*.csproj
+*.sln
+Assets/Plugins/Editor/JetBrains.meta
+Assets/Plugins/Editor/JetBrains
+Library
+Logs
+obj
+Temp

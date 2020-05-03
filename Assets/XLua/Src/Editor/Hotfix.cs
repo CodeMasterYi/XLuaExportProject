@@ -467,9 +467,9 @@ namespace XLua
             {
                 invoke.Parameters.Add(new ParameterDefinition(self));
             }
-            foreach (var argType in argTypes)
+            for(int i = 0; i < argTypes.Count; i++)
             {
-                invoke.Parameters.Add(new ParameterDefinition(argType));
+                invoke.Parameters.Add(new ParameterDefinition(method.Parameters[i].Name, (method.Parameters[i].IsOut ? Mono.Cecil.ParameterAttributes.Out : Mono.Cecil.ParameterAttributes.None), argTypes[i]));
             }
             invoke.ImplAttributes = Mono.Cecil.MethodImplAttributes.Runtime;
             delegateDef.Methods.Add(invoke);
@@ -982,6 +982,15 @@ namespace XLua
                     }
                 }
             }
+
+            int offset = 0;
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                var instruction = instructions[i];
+                instruction.Offset = offset;
+                offset += instruction.GetSize();
+            }
+
             for (int i = 0; i < instructions.Count; i++)
             {
                 var instruction = instructions[i];
@@ -1621,7 +1630,7 @@ namespace XLua
             var mono_path = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
                 "Data/MonoBleedingEdge/bin/mono.exe");
 #endif
-            var inject_tool_path = "./Assets/XLua/Tools/XLuaHotfixInject.exe";
+            var inject_tool_path = "./Tools/XLuaHotfixInject.exe";
             if (!File.Exists(inject_tool_path))
             {
                 UnityEngine.Debug.LogError("please install the Tools");

@@ -10,30 +10,26 @@ using UnityEngine;
 using System.Collections;
 using XLua;
 
-namespace Tutorial
-{
-    public class ByFile : MonoBehaviour
+public class ByFile : MonoBehaviour {
+    LuaEnv luaenv = null;
+    // Use this for initialization
+    void Start()
     {
-        LuaEnv luaenv = null;
-        // Use this for initialization
-        void Start()
-        {
-            luaenv = new LuaEnv();
-            luaenv.DoString("require 'byfile'");
-        }
+        luaenv = new LuaEnv();
+        luaenv.DoString("require 'byfile'");
+    }
 
-        // Update is called once per frame
-        void Update()
+    // Update is called once per frame
+    void Update()
+    {
+        if (luaenv != null)
         {
-            if (luaenv != null)
-            {
-                luaenv.Tick();
-            }
+            luaenv.Tick();
         }
+    }
 
-        void OnDestroy()
-        {
-            luaenv.Dispose();
-        }
+    void OnDestroy()
+    {
+        luaenv.Dispose();
     }
 }

@@ -10,39 +10,34 @@ using UnityEngine;
 using System.Collections;
 using XLua;
 
-namespace Tutorial
-{
-    public class CustomLoader : MonoBehaviour
+public class CustomLoader : MonoBehaviour {
+    LuaEnv luaenv = null;
+    // Use this for initialization
+    void Start()
     {
-        LuaEnv luaenv = null;
-        // Use this for initialization
-        void Start()
-        {
-            luaenv = new LuaEnv();
-            luaenv.AddLoader((ref string filename) =>
-            {
-                if (filename == "InMemory")
-                {
-                    string script = "return {ccc = 9999}";
-                    return System.Text.Encoding.UTF8.GetBytes(script);
-                }
-                return null;
-            });
-            luaenv.DoString("print('InMemory.ccc=', require('InMemory').ccc)");
-        }
+        luaenv = new LuaEnv();
+        luaenv.AddLoader((ref string filename) => {
+             if (filename == "InMemory")
+             {
+                 string script = "return {ccc = 9999}";
+                 return System.Text.Encoding.UTF8.GetBytes(script);
+             }
+             return null;
+         });
+        luaenv.DoString("print('InMemory.ccc=', require('InMemory').ccc)");
+    }
 
-        // Update is called once per frame
-        void Update()
+    // Update is called once per frame
+    void Update()
+    {
+        if (luaenv != null)
         {
-            if (luaenv != null)
-            {
-                luaenv.Tick();
-            }
+            luaenv.Tick();
         }
+    }
 
-        void OnDestroy()
-        {
-            luaenv.Dispose();
-        }
+    void OnDestroy()
+    {
+        luaenv.Dispose();
     }
 }
